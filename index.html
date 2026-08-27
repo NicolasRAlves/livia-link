@@ -114,13 +114,28 @@ body{
   box-shadow:0 20px 34px -14px rgba(48,32,20,.6);
 }
 .photo .frame{
+  position:relative;
   width:100%; height:100%; border-radius:50%;
   overflow:hidden;
-  background:
-    linear-gradient(160deg, #4a3526, #24170e);   /* fallback caso não tenha foto */
-  display:grid; place-items:center;
+  /* garante o recorte redondo tambem no Safari/iOS */
+  -webkit-mask-image:-webkit-radial-gradient(circle, #fff 100%, #000 100%);
+  background:var(--cream-hi);   /* fundo atras da foto */
 }
-.photo .frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+.photo .frame img{
+  /* AJUSTE DA FOTO DENTRO DO CIRCULO:
+     --foto-y    -> menor sobe, maior desce (ex.: 20% / 45% / 65%)
+     --foto-zoom -> 1 preenche o circulo; menor afasta (ex.: .9) */
+  --foto-y: 20%;
+  --foto-zoom: 1;
+  position:absolute; top:50%; left:50%;
+  width:calc(100% * var(--foto-zoom));
+  height:calc(100% * var(--foto-zoom));
+  margin-left:calc(-50% * var(--foto-zoom));
+  margin-top:calc(-50% * var(--foto-zoom));
+  object-fit:cover;
+  object-position:center var(--foto-y);
+  display:block;
+}
 .photo .frame .ph{ color:#d8c3ab; font-size:12px; letter-spacing:.14em; text-transform:uppercase; }
 
 .name{
@@ -229,7 +244,7 @@ body{
     <!-- FOTO: troque o src do <img>. Sem foto, mostra o placeholder abaixo. -->
     <div class="photo">
       <div class="frame">
-        <img src="foto.jpg" alt="foto">
+        <img src="IMG_2952.JPG (1).jpeg" alt="foto">
         <!-- <span class="ph">Foto</span> -->
       </div>
     </div>
